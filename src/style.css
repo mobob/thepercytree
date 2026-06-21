@@ -146,7 +146,7 @@ body {
 .u { font-weight: 600; }
 .loc { font-size: 11px; color: var(--ink); font-weight: 400; }
 .dots { margin-left: auto; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; display: inline-flex; }
-.photo img { width: 100%; display: block; }
+.photo img { width: 100%; height: auto; display: block; object-fit: cover; }
 /* carousel: horizontal snap-scroll of the post's images */
 .photo.carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; position: relative; scrollbar-width: none; }
 .photo.carousel::-webkit-scrollbar { display: none; }

@@ -237,6 +237,33 @@ for (const post of posts) {
   }
 }
 
+// real pixel dimensions straight from the file header (JPEG SOF / PNG IHDR).
+// The feed reserves each image's box from these, so there's no layout shift
+// (scroll-to-post lands right) and no stretching of non-square images.
+function imageSize(file: string): { width: number; height: number } | null {
+  const b = readFileSync(file);
+  if (b.length > 24 && b[0] === 0x89 && b[1] === 0x50) return { width: b.readUInt32BE(16), height: b.readUInt32BE(20) };
+  if (b[0] === 0xff && b[1] === 0xd8) {
+    let o = 2;
+    while (o + 9 < b.length) {
+      if (b[o] !== 0xff) { o++; continue; }
+      const m = b[o + 1];
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc)
+        return { height: b.readUInt16BE(o + 5), width: b.readUInt16BE(o + 7) };
+      o += 2 + b.readUInt16BE(o + 2);
+    }
+  }
+  return null;
+}
+for (const post of posts) {
+  for (const im of post.images) {
+    const f = join(OUT_IMG, im.file);
+    if (!existsSync(f)) continue;
+    const dim = imageSize(f);
+    if (dim) { im.width = dim.width; im.height = dim.height; }
+  }
+}
+
 mkdirSync(p("src/data"), { recursive: true });
 writeFileSync(p("src/data/posts.json"), JSON.stringify(posts, null, 2));
 
