@@ -444,6 +444,7 @@ a.tag { cursor: pointer; }
     align-items: center;
     justify-content: center;
     flex: 0 0 56px;
+    height: 56px;          /* explicit so the fixed (blend) chin matches the flex one */
     background: #000;
   }
   /* blend is a fixed full-screen view — pin its home button to the bottom */

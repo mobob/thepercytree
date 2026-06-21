@@ -34,9 +34,9 @@ function renderHome(): string {
           <span class="ico"><img src="/favicon.svg" alt="" /></span>
           <span class="label">Instagram</span>
         </a>
-        <a class="appicon" href="#/blend" aria-label="Open blend">
+        <a class="appicon" href="#/blend" aria-label="Open Calendar">
           <span class="ico"><img src="/icon-blend.svg" alt="" /></span>
-          <span class="label">blend</span>
+          <span class="label">Calendar</span>
         </a>
         <button class="appicon" data-statement aria-haspopup="dialog" aria-label="Open Settings">
           <span class="ico"><img src="/icon-settings.svg" alt="" /></span>
