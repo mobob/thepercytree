@@ -343,9 +343,9 @@ a.tag { cursor: pointer; }
   -webkit-tap-highlight-color: transparent;
 }
 .appicon .ico {
-  width: 56px;
-  height: 56px;
-  border-radius: 13px;
+  width: 64px;
+  height: 64px;
+  border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 }
