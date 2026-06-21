@@ -102,10 +102,10 @@ const exifFrom = (entry: any): Exif | null => {
 const MOBOB_OWNER_ID = "435625";
 const OWNER_USERNAMES: Record<string, string> = {
   [MOBOB_OWNER_ID]: "mobob",
-  // Other #thepercytree posters — real handles unknown from the data; fill in if known.
-  "3417835": "instagram_user",
-  "2027465871": "instagram_user",
-  "297785830": "instagram_user",
+  // Other #thepercytree posters.
+  "3417835": "mwhelen", // confirmed (instagram.com/mwhelen)
+  "2027465871": "instagram_user", // 2016-12-19 brunch post — handle TBD
+  "297785830": "instagram_user", // 2017-05-22 "it's mine now punk" — handle TBD
 };
 const ownerName = (id: any) => OWNER_USERNAMES[String(id)] ?? "instagram_user";
 
