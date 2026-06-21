@@ -39,7 +39,7 @@ function renderHome(): string {
           <span class="label">Calendar</span>
         </a>
         <button class="appicon" data-statement aria-haspopup="dialog" aria-label="Open Settings">
-          <span class="ico"><img src="/icon-settings.svg" alt="" /></span>
+          <span class="ico"><img src="/icon-settings.png" alt="" /></span>
           <span class="label">Settings</span>
         </button>
       </div>
