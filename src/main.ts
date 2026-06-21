@@ -10,15 +10,41 @@ const posts = postsData as Post[];
 const app = document.getElementById("app")!;
 
 type Route =
+  | { index: "home" }
   | { index: "ig"; view: IgView; post?: string }
   | { index: "blend" };
 
+const isMobile = () => matchMedia("(max-width: 700px)").matches;
+
 function parse(): Route {
   const seg = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (seg[0] === "home") return { index: "home" };
   if (seg[0] === "blend") return { index: "blend" };
   if (seg[0] === "ig" && seg[1] === "p" && seg[2]) return { index: "ig", view: "feed", post: seg[2] };
   if (seg[0] === "ig" && seg[1] === "feed") return { index: "ig", view: "feed" };
   return { index: "ig", view: "grid" };
+}
+
+/** iPhone springboard: two apps over a wallpaper. Mobile lands here. */
+function renderHome(): string {
+  return `
+    <div class="springboard">
+      <div class="apps">
+        <a class="appicon" href="#/ig" aria-label="Open Instagram">
+          <span class="ico"><img src="/favicon.svg" alt="" /></span>
+          <span class="label">Instagram</span>
+        </a>
+        <button class="appicon" data-statement aria-haspopup="dialog" aria-label="Open Settings">
+          <span class="ico"><img src="/icon-settings.svg" alt="" /></span>
+          <span class="label">Settings</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+/** The device's physical home button, in a black chin (mobile only; CSS-hidden on desktop). */
+function deviceChin(): string {
+  return `<div class="device-chin"><button class="home-btn" data-home aria-label="Home"></button></div>`;
 }
 
 function statusbar(): string {
@@ -72,16 +98,9 @@ function mountStatement() {
       <button class="statement-close" aria-label="Close">✕</button>
       <div class="statement-body">${mdLite(statementMd)}</div>
     </div>`;
+  document.body.append(overlay);
 
-  // mobile-only affordance (the desktop trigger lives in the toolbar)
-  const fab = document.createElement("button");
-  fab.className = "about-fab";
-  fab.setAttribute("data-statement", "");
-  fab.setAttribute("aria-haspopup", "dialog");
-  fab.textContent = "about";
-
-  document.body.append(overlay, fab);
-
+  // desktop opens via the toolbar "about"; mobile opens via the Settings app icon
   const setOpen = (v: boolean) => { overlay.dataset.open = String(v); };
   document.addEventListener("click", (e) => {
     const t = e.target as HTMLElement;
@@ -102,11 +121,22 @@ function render() {
     return;
   }
 
+  if (r.index === "home") {
+    app.dataset.view = "home";
+    app.innerHTML = `
+      <div class="device home">
+        <div class="app">${renderHome()}</div>
+        ${deviceChin()}
+      </div>${toolbar(r)}`;
+    return;
+  }
+
   app.dataset.view = r.view;
   app.innerHTML = `
     <div class="device">
       ${statusbar()}
       <div class="app">${renderIgApp(posts, r.view)}</div>
+      ${deviceChin()}
     </div>${toolbar(r)}`;
 
   initCarousels(app);
@@ -117,6 +147,8 @@ function render() {
 // chrome/frame toggles (IG only); tap-to-fill on like + save
 app.addEventListener("click", (e) => {
   const target = e.target as HTMLElement;
+
+  if (target.closest("[data-home]")) { location.hash = "#/home"; return; }
 
   const toggle = target.closest<HTMLElement>("[data-toggle]");
   if (toggle) {
@@ -133,4 +165,6 @@ app.addEventListener("click", (e) => {
 
 window.addEventListener("hashchange", render);
 mountStatement();
+// mobile boots to the iPhone home screen; desktop keeps landing in the app
+if (!location.hash && isMobile()) location.hash = "#/home";
 render();

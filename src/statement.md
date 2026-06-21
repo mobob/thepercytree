@@ -1,18 +1,21 @@
 # #thepercytree
 
-For the better part of a decade, I kept pointing my phone at the same tree.
+Sometime in 2015 I started looking for an anchor. I was inspired by Noah Kalina and his #bedmounds posts (as well as all his work). I was also running a lot, and thought it might be neat to do something that married the two.
 
-*#thepercytree* was a quiet hashtag — one tag, mostly used by one person, a small
-corner of Instagram through its gradient years. I came back to the same frame again
-and again: different light, different weather, the same patient subject, 183 times
-between 2015 and 2023.
+So one day, after i finished my run, about 50m from where I was living, I looked up and saw an nice tree. The street was Percy street. I looked at my feet. I looked at the tree. I snapped a pic. And #thepercytree was born.
 
-This is that archive, rebuilt — not lifted into a gallery, but returned to where it
-was made. The feed, the grid, the chrome of the app exactly as it looked then. A
-second lens, *blend*, dissolves the photographs into one another, so the years pass
-as a single slow gradient of their own.
+As an aside - hashtags at the time were a way to identify a trend, establish a way to label your own social media existence. Until hashtags became marketing and spam, what a simple and lovely time that was!
 
-It's a small piece about attention: about repetition, and the seasons, and what it
-means to keep watching one ordinary living thing over the course of a life.
+I had no aspirations and didn't know for how long it would carry on. But after a few times, I realized it was fun, I liked the routine of it, people seemed to enjoy the consistency, so...  I just kept going.
 
-— Bob Durie
+Even amidst the occasional long trip or move, there would still be pics of it.
+
+Until I couldn't anymore. The tree was heavily injured during a storm in 2023. And then the city took it right down.
+
+Afterwords the hashtag lives on...  but one day in 2026 i clicked on the hashtag, and it no longer worked. Overtaken by instagram's take on a "for you page", or whatever. I could no longer see the posts. The app was updated or broken (however you percieve it) - and a reminder that in the app and other's chrome, nothing is permanent, nothing is yours.
+
+This is that archive, rebuilt. We need postirity and ownership more than ever. Other than the hosting, this is mine, and shouldn't ever need to change.
+
+An ode to attention and repetition. Social media. Bodies of work. Permanence and ephermerelness. Life and death!
+
+— Bob Durie, 2026

@@ -315,25 +315,71 @@ a.tag { cursor: pointer; }
 .toolbar .about:hover { color: var(--ink); border-color: #aaa; }
 #app[data-index="blend"] .toolbar .about { background: rgba(0,0,0,0.35); color: #fff; border-color: rgba(255,255,255,0.4); }
 
-/* ---- artist statement overlay ---- */
-.about-fab {
-  position: fixed;
-  top: 9px;
-  right: 12px;
-  z-index: 6;
-  display: none;                 /* mobile only (see media query) */
-  font: inherit;
-  font-size: 11px;
-  letter-spacing: 0.4px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  background: rgba(255, 255, 255, 0.55);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  color: #555;
+/* ---- iPhone home screen (springboard) ---- */
+.device.home { background: #000; }
+.springboard {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 22%;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.1) 38%, rgba(0,0,0,0.5)),
+    url("/img/17856943870002893.jpg") center / cover;
+}
+.apps { display: flex; gap: 30px; }
+.appicon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  width: 76px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.appicon .ico {
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+.appicon .ico img { width: 100%; height: 100%; display: block; }
+.appicon .label {
+  font-size: 12px;
+  color: #fff;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+.appicon:active .ico { transform: scale(0.94); transition: transform 0.1s; }
+
+/* the device's physical home button, in a black chin (mobile only) */
+.device-chin { display: none; }
+.home-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: #111;
+  box-shadow: inset 0 0 0 1.5px #383838;
   cursor: pointer;
 }
+.home-btn::before {
+  content: "";
+  position: absolute;
+  inset: 11px;
+  border: 2px solid #5a5a5a;
+  border-radius: 5px;
+}
+.home-btn:active { background: #222; }
+
+/* ---- artist statement overlay ---- */
 .statement {
   position: fixed;
   inset: 0;
@@ -383,14 +429,20 @@ a.tag { cursor: pointer; }
 .statement-body p:last-child { margin-bottom: 0; }
 .statement-body em { font-style: italic; }
 
-/* ---- mobile: drop our chrome, just the experience ---- */
+/* ---- mobile: drop our chrome; the device fills the screen, home button included ---- */
 @media (max-width: 700px) {
   body { padding: 0; gap: 0; background: #000; }
   .toolbar { display: none; }
   .blend-scrub { display: none; }
-  .about-fab { display: block; }
   .device { width: 100vw; height: 100dvh; border-radius: 0; }
   #app[data-frame="on"] .device { border: 0; border-radius: 0; height: 100dvh; box-shadow: none; }
   #app[data-frame="on"] .statusbar { display: none; }  /* the phone has its own */
+  .device-chin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 56px;
+    background: #000;
+  }
   .statement-card { padding: 34px 22px 24px; max-height: 86dvh; }
 }
