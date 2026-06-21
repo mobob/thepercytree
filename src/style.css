@@ -321,9 +321,7 @@ a.tag { cursor: pointer; }
   flex: 1;
   min-height: 0;
   padding: 26px 14px 0;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0) 18%),
-    url("/wallpaper.svg") center / cover;
+  background: #000 url("/wallpaper.jpeg") center / cover no-repeat;
 }
 .apps {
   display: grid;
