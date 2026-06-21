@@ -5,7 +5,8 @@
   "scripts": {
     "data": "bun scripts/ingest-export.ts",
     "dev": "vite",
-    "build": "bun scripts/ingest-export.ts && vite build",
+    "build": "vite build",
+    "build:data": "bun scripts/ingest-export.ts && vite build",
     "preview": "vite preview",
     "deploy": "bun run scripts/deploy.ts"
   },
