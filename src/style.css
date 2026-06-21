@@ -343,17 +343,17 @@ a.tag { cursor: pointer; }
   -webkit-tap-highlight-color: transparent;
 }
 .appicon .ico {
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
+  width: 56px;
+  height: 56px;
+  border-radius: 13px;
   overflow: hidden;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 }
 .appicon .ico img { width: 100%; height: 100%; display: block; }
 .appicon .label {
-  font-size: 12px;
+  font-size: 11px;
   color: #fff;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.1px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 .appicon:active .ico { transform: scale(0.94); transition: transform 0.1s; }
