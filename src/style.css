@@ -320,15 +320,17 @@ a.tag { cursor: pointer; }
 .springboard {
   flex: 1;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 22%;
+  padding: 26px 14px 0;
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.1) 38%, rgba(0,0,0,0.5)),
-    url("/img/17856943870002893.jpg") center / cover;
+    linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0) 18%),
+    url("/wallpaper.svg") center / cover;
 }
-.apps { display: flex; gap: 30px; }
+.apps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px 0;
+  justify-items: center;
+}
 .appicon {
   display: flex;
   flex-direction: column;
@@ -444,5 +446,14 @@ a.tag { cursor: pointer; }
     flex: 0 0 56px;
     background: #000;
   }
+  /* blend is a fixed full-screen view — pin its home button to the bottom */
+  #app[data-index="blend"] .device-chin {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+  }
+  #app[data-index="blend"] .blend-counter { bottom: 72px; }
   .statement-card { padding: 34px 22px 24px; max-height: 86dvh; }
 }

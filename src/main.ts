@@ -25,7 +25,7 @@ function parse(): Route {
   return { index: "ig", view: "grid" };
 }
 
-/** iPhone springboard: two apps over a wallpaper. Mobile lands here. */
+/** iPhone springboard: apps in a top-left 4-column grid over a wallpaper. Mobile lands here. */
 function renderHome(): string {
   return `
     <div class="springboard">
@@ -33,6 +33,10 @@ function renderHome(): string {
         <a class="appicon" href="#/ig" aria-label="Open Instagram">
           <span class="ico"><img src="/favicon.svg" alt="" /></span>
           <span class="label">Instagram</span>
+        </a>
+        <a class="appicon" href="#/blend" aria-label="Open blend">
+          <span class="ico"><img src="/icon-blend.svg" alt="" /></span>
+          <span class="label">blend</span>
         </a>
         <button class="appicon" data-statement aria-haspopup="dialog" aria-label="Open Settings">
           <span class="ico"><img src="/icon-settings.svg" alt="" /></span>
@@ -116,7 +120,7 @@ function render() {
 
   if (r.index === "blend") {
     app.dataset.view = "blend";
-    app.innerHTML = renderBlend(posts) + toolbar(r);
+    app.innerHTML = renderBlend(posts) + deviceChin() + toolbar(r);
     initBlend(app.querySelector<HTMLElement>(".blend")!);
     return;
   }

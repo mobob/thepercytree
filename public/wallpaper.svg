@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920" preserveAspectRatio="xMidYMid slice">
+  <!-- recreation of an iOS 8/9-era default wallpaper: deep blue with soft light -->
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%" stop-color="#11305a"/>
+      <stop offset="55%" stop-color="#0c2244"/>
+      <stop offset="100%" stop-color="#081730"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="36%" cy="32%" r="58%">
+      <stop offset="0%" stop-color="#4ea3da" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#4ea3da" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="74%" cy="76%" r="55%">
+      <stop offset="0%" stop-color="#6a59c4" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#6a59c4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow3" cx="62%" cy="8%" r="45%">
+      <stop offset="0%" stop-color="#7fd3e6" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#7fd3e6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#base)"/>
+  <rect width="1080" height="1920" fill="url(#glow1)"/>
+  <rect width="1080" height="1920" fill="url(#glow2)"/>
+  <rect width="1080" height="1920" fill="url(#glow3)"/>
+</svg>

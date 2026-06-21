@@ -1,23 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <!-- iOS-style Settings icon: grey cog on a silver field -->
+  <!-- iOS-style Settings: interlocking cogs on a brushed-silver field -->
   <defs>
-    <radialGradient id="sg" cx="50%" cy="35%" r="80%">
-      <stop offset="0%" stop-color="#f4f4f4"/>
-      <stop offset="100%" stop-color="#c9ccd1"/>
+    <linearGradient id="sgbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9dbde"/>
+      <stop offset="50%" stop-color="#c3c6cb"/>
+      <stop offset="100%" stop-color="#a9adb3"/>
+    </linearGradient>
+    <radialGradient id="sgear" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#8d9097"/>
+      <stop offset="100%" stop-color="#6f7278"/>
     </radialGradient>
+    <!-- one gear: 12 trapezoidal teeth + ring; reused at two sizes -->
+    <g id="cog">
+      <g fill="currentColor">
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(0)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(30)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(60)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(90)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(120)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(150)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(180)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(210)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(240)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(270)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(300)"/>
+        <path d="M-26 -150 H26 L20 -104 H-20 Z" transform="rotate(330)"/>
+      </g>
+      <circle r="120" fill="currentColor"/>
+      <circle r="52" fill="#c3c6cb"/>
+    </g>
   </defs>
-  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#sg)"/>
-  <g fill="#6e7176">
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(0 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(40 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(80 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(120 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(160 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(200 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(240 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(280 256 256)"/>
-    <rect x="232" y="58" width="48" height="86" rx="10" transform="rotate(320 256 256)"/>
-    <circle cx="256" cy="256" r="150"/>
-  </g>
-  <circle cx="256" cy="256" r="66" fill="url(#sg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#sgbg)"/>
+  <!-- small cog, upper-right, interlocking -->
+  <use href="#cog" transform="translate(366 168) scale(0.42)" color="#7c7f85"/>
+  <!-- main cog -->
+  <use href="#cog" transform="translate(238 268) scale(1)" color="#71747a"/>
+  <circle cx="238" cy="268" r="120" fill="url(#sgear)"/>
+  <circle cx="238" cy="268" r="50" fill="#c3c6cb"/>
 </svg>
