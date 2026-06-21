@@ -7,6 +7,13 @@ import { type Post, USERNAME, HASHTAG, coverImg, imgUrl, esc, linkify, longDate 
 
 export type IgView = "grid" | "feed";
 
+// per-account avatars; unknown handles fall back to the IG default silhouette
+const AVATARS: Record<string, string> = {
+  mobob: "/avatar.jpg",
+  mwhelen: "/avatar-mwhelen.jpg",
+};
+const avatarFor = (u: string) => AVATARS[u] ?? "/guest-avatar.svg";
+
 function gridView(posts: Post[]): string {
   const cells = posts
     .map(
@@ -28,19 +35,23 @@ function gridView(posts: Post[]): string {
 }
 
 function postCard(p: Post): string {
-  const me = p.username === USERNAME;
-  const avatar = me
-    ? `<div class="avatar"><img src="/avatar.jpg" alt="${USERNAME}" /></div>`
-    : `<div class="avatar"><img src="/guest-avatar.svg" alt="${esc(p.username)}" /></div>`;
+  const avatar = `<div class="avatar"><img src="${avatarFor(p.username)}" alt="${esc(p.username)}" /></div>`;
   const comments = p.comments
     .map(
       (c) =>
         `<div class="c"><span class="cu">${esc(c.username ?? p.username)}</span> ${linkify(c.text)}</div>`
     )
     .join("");
-  // carousel: stack images side-scrollable; cover first
+  // carousel: stack images side-scrollable; cover first.
+  // width/height reserve the image box so lazy-loaded posts above don't shift
+  // layout (which would throw off scroll-to-post). Default null dims to square.
   const slides = p.images
-    .map((im) => `<img loading="lazy" src="${imgUrl(im.file)}" alt="${esc(p.caption).slice(0, 80)}" />`)
+    .map(
+      (im) =>
+        `<img loading="lazy" width="${im.width || 1080}" height="${im.height || 1080}" src="${imgUrl(
+          im.file
+        )}" alt="${esc(p.caption).slice(0, 80)}" />`
+    )
     .join("");
   const nav =
     p.images.length > 1
