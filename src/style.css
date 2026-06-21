@@ -414,7 +414,6 @@ a.tag { cursor: pointer; }
 @media (max-width: 700px) {
   body { padding: 0; gap: 0; background: #000; }
   .toolbar { display: none; }
-  .blend-scrub { display: none; }
   .device { width: 100vw; height: 100dvh; border-radius: 0; }
   #app[data-frame="on"] .device { border: 0; border-radius: 0; height: 100dvh; box-shadow: none; }
   #app[data-frame="on"] .statusbar { display: none; }  /* the phone has its own */
@@ -431,6 +430,8 @@ a.tag { cursor: pointer; }
     min-height: 50px;
     padding-bottom: env(safe-area-inset-bottom);
   }
-  #app[data-index="blend"] .blend-counter { bottom: calc(28px + env(safe-area-inset-bottom)); }
+  /* keep the blend scrubber above the home indicator; counter sits above it */
+  .blend-scrub { bottom: calc(20px + env(safe-area-inset-bottom)); }
+  #app[data-index="blend"] .blend-counter { bottom: calc(52px + env(safe-area-inset-bottom)); }
   .statement-card { padding: 34px 22px 24px; max-height: 86dvh; }
 }
