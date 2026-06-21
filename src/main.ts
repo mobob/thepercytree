@@ -46,11 +46,6 @@ function renderHome(): string {
     </div>`;
 }
 
-/** The device's physical home button, in a black chin (mobile only; CSS-hidden on desktop). */
-function deviceChin(): string {
-  return `<div class="device-chin"><button class="home-btn" data-home aria-label="Home"></button></div>`;
-}
-
 function statusbar(): string {
   return `
     <div class="statusbar">
@@ -124,7 +119,7 @@ function render() {
 
   if (r.index === "blend") {
     app.dataset.view = "blend";
-    app.innerHTML = renderBlend(posts) + deviceChin() + toolbar(r);
+    app.innerHTML = renderBlend(posts) + toolbar(r);
     initBlend(app.querySelector<HTMLElement>(".blend")!);
     return;
   }
@@ -134,7 +129,6 @@ function render() {
     app.innerHTML = `
       <div class="device home">
         <div class="app">${renderHome()}</div>
-        ${deviceChin()}
       </div>${toolbar(r)}`;
     return;
   }
@@ -144,7 +138,6 @@ function render() {
     <div class="device">
       ${statusbar()}
       <div class="app">${renderIgApp(posts, r.view)}</div>
-      ${deviceChin()}
     </div>${toolbar(r)}`;
 
   initCarousels(app);
@@ -155,8 +148,6 @@ function render() {
 // chrome/frame toggles (IG only); tap-to-fill on like + save
 app.addEventListener("click", (e) => {
   const target = e.target as HTMLElement;
-
-  if (target.closest("[data-home]")) { location.hash = "#/home"; return; }
 
   const toggle = target.closest<HTMLElement>("[data-toggle]");
   if (toggle) {
