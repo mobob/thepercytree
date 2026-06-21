@@ -428,7 +428,7 @@ a.tag { cursor: pointer; }
   .tabbar {
     flex-basis: auto;
     height: auto;
-    min-height: 44px;
+    min-height: 50px;
     padding-bottom: env(safe-area-inset-bottom);
   }
   #app[data-index="blend"] .blend-counter { bottom: calc(28px + env(safe-area-inset-bottom)); }

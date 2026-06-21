@@ -90,7 +90,7 @@ export function renderIgApp(posts: Post[], view: IgView): string {
       <a class="ic${view === "grid" ? " active" : ""}" href="#/ig" aria-label="Search">${icons.search}</a>
       <span class="ic inert" aria-label="Camera">${icons.plus}</span>
       <a class="ic" href="#/ig/feed" aria-label="Activity">${icons.activity}</a>
-      <a class="me" href="#/ig" aria-label="Profile"><img src="/avatar.jpg" alt="${USERNAME}" /></a>
+      <a class="me" href="#/home" aria-label="Home screen"><img src="/avatar.jpg" alt="${USERNAME}" /></a>
     </nav>`;
 }
 
