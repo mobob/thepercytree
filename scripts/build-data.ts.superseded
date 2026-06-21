@@ -1,0 +1,107 @@
+/**
+ * build-data.ts — join the frozen Instagram scrape into a clean, chronological posts.json.
+ *
+ * Reads:  source/thepercytree.json  (143 records, 9 duplicate shortcodes)
+ *         source/images/*.jpg       (134 chronological, dated files)
+ * Writes: src/data/posts.json       (134 unique posts, sorted oldest→newest)
+ *
+ * Join key: the "<id>_<id>_<id>_n.jpg" token embedded in both the scrape `urls`
+ * and the on-disk image filename. Dedup by shortcode (first record wins).
+ */
+import { readdirSync, readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
+const ROOT = join(import.meta.dir, "..");
+const SRC_JSON = join(ROOT, "source/thepercytree.json");
+const SRC_IMAGES = join(ROOT, "source/images");
+const OUT_DIR = join(ROOT, "src/data");
+const OUT_JSON = join(OUT_DIR, "posts.json");
+
+type Raw = {
+  shortcode: string;
+  taken_at_timestamp: number;
+  is_video: boolean;
+  dimensions: { width: number; height: number };
+  display_url: string;
+  urls?: string[];
+  location: { name?: string } | null;
+  edge_liked_by: { count: number };
+  edge_media_to_comment: {
+    count: number;
+    edges?: { node: { text: string; owner?: { username?: string } } }[];
+  };
+  edge_media_to_caption: { edges: { node: { text: string } }[] };
+};
+
+type Post = {
+  shortcode: string;
+  date: string;            // ISO date (UTC)
+  timestamp: number;       // unix seconds
+  image: string;           // filename within source/images
+  width: number;
+  height: number;
+  likes: number;
+  caption: string;
+  location: string | null;
+  comments: { text: string; username: string | null }[];
+};
+
+const TOKEN = /([0-9]+_[0-9]+_[0-9]+_n\.jpg)/;
+const tokenOf = (s: string | undefined): string | null => {
+  const m = s?.match(TOKEN);
+  return m ? m[1] : null;
+};
+
+const images = readdirSync(SRC_IMAGES).filter((f) => f.endsWith(".jpg"));
+const imageByToken = new Map<string, string>();
+for (const f of images) {
+  const t = tokenOf(f);
+  if (t) imageByToken.set(t, f);
+}
+
+const raw: Raw[] = JSON.parse(readFileSync(SRC_JSON, "utf8"));
+
+const seen = new Set<string>();
+const posts: Post[] = [];
+const unmatched: string[] = [];
+
+for (const r of raw) {
+  if (seen.has(r.shortcode)) continue; // dedup: first record wins
+  seen.add(r.shortcode);
+
+  const token = tokenOf(r.urls?.[0]) ?? tokenOf(r.display_url);
+  const image = token ? imageByToken.get(token) : undefined;
+  if (!image) {
+    unmatched.push(r.shortcode);
+    continue;
+  }
+
+  const caption = r.edge_media_to_caption.edges[0]?.node.text ?? "";
+  const comments =
+    r.edge_media_to_comment.edges?.map((e) => ({
+      text: e.node.text,
+      username: e.node.owner?.username ?? null,
+    })) ?? [];
+
+  posts.push({
+    shortcode: r.shortcode,
+    date: new Date(r.taken_at_timestamp * 1000).toISOString().slice(0, 10),
+    timestamp: r.taken_at_timestamp,
+    image,
+    width: r.dimensions.width,
+    height: r.dimensions.height,
+    likes: r.edge_liked_by.count,
+    caption,
+    location: r.location?.name ?? null,
+    comments,
+  });
+}
+
+posts.sort((a, b) => a.timestamp - b.timestamp);
+
+mkdirSync(OUT_DIR, { recursive: true });
+writeFileSync(OUT_JSON, JSON.stringify(posts, null, 2));
+
+console.log(`✓ ${posts.length} posts → src/data/posts.json`);
+console.log(`  ${posts[0].date} → ${posts[posts.length - 1].date}`);
+if (unmatched.length) console.warn(`  ⚠ ${unmatched.length} unmatched: ${unmatched.join(", ")}`);

@@ -1,0 +1,305 @@
+/* #thepercytree — 2016-era Instagram, faithful-ish. Plain CSS, state via #app data-attrs. */
+@font-face {
+  font-family: "Grand Hotel";        /* near-identical free stand-in for IG's Billabong wordmark */
+  src: url("/fonts/grand-hotel.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+:root {
+  --ig-blue: #3897f0;
+  --ig-red: #ed4956;
+  --ink: #262626;
+  --grey: #8e8e8e;
+  --line: #dbdbdb;
+  --bg: #fafafa;
+  --device-w: 375px;   /* iPhone 6/SE logical width */
+  --device-h: 667px;
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 16px;
+  background: #efefef;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+#app { display: contents; }
+
+/* ---- device frame ---- */
+.device {
+  width: var(--device-w);
+  height: var(--device-h);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#app[data-frame="on"] .device {
+  border: 14px solid #1a1a1a;
+  border-radius: 44px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  height: calc(var(--device-h) + 28px);
+}
+.statusbar {
+  display: none;
+  height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 26px 0;          /* keep clear of the rounded bezel corners */
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--ink);
+}
+#app[data-frame="on"] .statusbar { display: flex; }
+.statusbar .time { font-variant-numeric: tabular-nums; }
+.sb-right { display: inline-flex; gap: 5px; align-items: center; }
+.sb-ic { display: block; height: 11px; width: auto; }
+.sb-batt { height: 12px; }
+.lte { font-size: 11px; font-weight: 600; letter-spacing: 0.2px; }
+
+.app { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* ---- IG chrome (toggleable) ---- */
+.topbar {
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-family: "Grand Hotel", "Snell Roundhand", cursive;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--ink);
+}
+.tabbar {
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid var(--line);
+}
+.tabbar .ic { color: var(--ink); text-decoration: none; }
+.tabbar .ic.active .svg { fill: var(--ink); }
+.tabbar .me { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(45deg,#f09433,#dc2743,#bc1888); display: block; }
+
+/* SVG glyphs */
+.svg { width: 24px; height: 24px; display: block; }
+.actions .svg { width: 25px; height: 25px; }
+.tabbar .svg { width: 24px; height: 24px; }
+.ic { background: none; border: 0; padding: 0; margin: 0; color: var(--ink); cursor: pointer; display: inline-flex; }
+/* tap-to-fill states */
+.actions .ic.liked { color: var(--ig-red); }
+.actions .ic.liked .svg { fill: var(--ig-red); animation: pop 0.28s ease; }
+.actions .bookmark.saved .svg { fill: var(--ink); }
+@keyframes pop { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+#app[data-chrome="off"] .topbar,
+#app[data-chrome="off"] .tabbar { display: none; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; background: #fff; }
+
+/* ---- grid / hashtag page ---- */
+#app[data-view="grid"] .feed { display: none; }
+#app[data-view="feed"] .grid,
+#app[data-view="feed"] .hashtag-head { display: none; }
+
+.hashtag-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.hashtag-icon {
+  width: 56px; height: 56px;
+  flex: 0 0 56px;
+  border-radius: 50%;
+  background: #efefef;
+  display: grid; place-items: center;
+  font-size: 26px; color: var(--grey);
+}
+.hashtag-meta h1 { font-size: 16px; margin: 0 0 4px; }
+.hashtag-meta .count { font-size: 14px; color: var(--ink); }
+#app[data-chrome="off"] .hashtag-head { display: none; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.cell { aspect-ratio: 1; overflow: hidden; }
+.cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---- feed post card ---- */
+.post { border-bottom: 1px solid var(--line); }
+.post-head { display: flex; align-items: center; gap: 10px; padding: 8px 12px; }
+.avatar { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; background: #efefef; flex: 0 0 30px; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tabbar .me img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+.post-head-meta { display: flex; flex-direction: column; line-height: 1.2; }
+.u { font-weight: 600; }
+.loc { font-size: 11px; color: var(--ink); font-weight: 400; }
+.dots { margin-left: auto; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; display: inline-flex; }
+.photo img { width: 100%; display: block; }
+/* carousel: horizontal snap-scroll of the post's images */
+.photo.carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; position: relative; scrollbar-width: none; }
+.photo.carousel::-webkit-scrollbar { display: none; }
+.photo.carousel img { flex: 0 0 100%; scroll-snap-align: center; user-select: none; -webkit-user-drag: none; }
+.photo.carousel.dragging { cursor: grabbing; scroll-snap-type: none; }
+.photo.carousel:hover { cursor: grab; }
+.carousel-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; gap: 4px; justify-content: center; pointer-events: none; }
+.carousel-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.5); transition: background 0.2s; }
+.carousel-dots span.on { background: var(--ig-blue); }
+.carousel-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 26px; height: 26px; border-radius: 50%; border: 0;
+  background: rgba(255,255,255,0.85); color: #262626;
+  font-size: 18px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25); z-index: 2;
+}
+.carousel-nav[hidden] { display: none; }
+.carousel-nav.prev { left: 8px; }
+.carousel-nav.next { right: 8px; }
+/* chrome off → hide carousel UI, leave the photos */
+#app[data-chrome="off"] .carousel-nav, #app[data-chrome="off"] .carousel-dots { display: none; }
+/* grid cell carousel indicator */
+.cell { position: relative; }
+.cell.multi::after { content: "▣"; position: absolute; top: 4px; right: 5px; color: #fff; font-size: 13px; text-shadow: 0 0 3px rgba(0,0,0,0.4); }
+.actions { display: flex; align-items: center; gap: 14px; padding: 10px 12px 6px; }
+.actions .bookmark { margin-left: auto; }
+.likes { font-weight: 600; padding: 2px 12px; font-size: 14px; }
+.caption { padding: 2px 12px; font-size: 14px; line-height: 1.4; }
+.view-comments { padding: 2px 12px; font-size: 14px; color: var(--grey); }
+.comments { padding: 2px 12px; font-size: 14px; color: var(--ink); }
+.comments .c { margin: 2px 0; }
+.cu { font-weight: 600; }
+.tag { color: #3f729b; text-decoration: none; }
+a.tag { cursor: pointer; }
+.tabbar .inert { cursor: default; }
+.ts { display: block; padding: 6px 12px 12px; font-size: 10px; letter-spacing: 0.4px; color: var(--grey); }
+
+/* chrome off → strip the card UI, leave breathing photos */
+#app[data-chrome="off"] .post-head,
+#app[data-chrome="off"] .actions,
+#app[data-chrome="off"] .likes,
+#app[data-chrome="off"] .caption,
+#app[data-chrome="off"] .comments,
+#app[data-chrome="off"] .ts { display: none; }
+#app[data-chrome="off"] .post { border-bottom: none; }
+#app[data-chrome="off"] .feed { display: flex; flex-direction: column; gap: 2px; }
+
+/* ---- blend index: full-frame scroll-crossfade ---- */
+.blend {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #000;
+  z-index: 1;
+  scrollbar-width: none;
+}
+.blend::-webkit-scrollbar { display: none; }
+.blend-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+}
+.bl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;          /* show the whole frame, never crop */
+  padding: 5vh 6vw;             /* matte border around the image */
+  box-sizing: border-box;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.blend-counter {
+  position: fixed;
+  bottom: 40px;
+  right: 18px;
+  z-index: 3;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 1px;
+  mix-blend-mode: difference;
+}
+/* scrubber: drag to scrub through all photos */
+.blend-scrub {
+  position: fixed;
+  left: 6vw;
+  right: 6vw;
+  bottom: 26px;
+  height: 22px;            /* tall hit area */
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+}
+.blend-scrub::before {     /* the track line */
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.blend-scrub-fill {
+  position: absolute;
+  left: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+}
+.blend-scrub-handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s;
+}
+.blend-scrub.dragging .blend-scrub-handle { transform: translateX(-50%) scale(1.3); }
+#app[data-index="blend"] { display: contents; }
+
+/* ---- our controls (outside the artifact) ---- */
+.toolbar { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+#app[data-index="blend"] .toolbar {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+}
+.seg { display: inline-flex; border: 1px solid #bbb; border-radius: 6px; overflow: hidden; }
+.seg a { padding: 6px 12px; text-decoration: none; color: var(--ink); background: #fff; }
+.seg a.on { background: var(--ink); color: #fff; }
+#app[data-index="blend"] .seg { border-color: rgba(255,255,255,0.5); }
+#app[data-index="blend"] .seg a { background: rgba(0,0,0,0.35); color: #fff; }
+#app[data-index="blend"] .seg a.on { background: #fff; color: #000; }
+.toolbar > button, .toolbar > a {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+}
+.seg a { font: inherit; }
+#app[data-chrome="on"] .toolbar [data-toggle="chrome"],
+#app[data-frame="on"] .toolbar [data-toggle="frame"] { background: var(--ink); color: #fff; border-color: var(--ink); }
