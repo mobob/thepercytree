@@ -5,6 +5,7 @@ export type Exif = { camera?: string; lat?: number; lng?: number; taken?: string
 export type Post = {
   id: string;
   shortcode: string | null;
+  username: string;
   date: string;
   timestamp: number;
   images: Img[];
@@ -31,7 +32,8 @@ export const esc = (s: string) =>
 
 // #thepercytree links back to the hashtag/search screen; other tags/mentions are styled only.
 export const linkify = (s: string) =>
-  esc(s).replace(/([#@][\w.]+)/g, (tok) =>
+  // (?<![&\w]) so we don't match the "#39" inside an escaped entity like &#39;
+  esc(s).replace(/(?<![&\w])[#@][\w.]+/g, (tok) =>
     tok.toLowerCase() === `#${HASHTAG}`
       ? `<a class="tag" href="#/ig">${tok}</a>`
       : `<span class="tag">${tok}</span>`

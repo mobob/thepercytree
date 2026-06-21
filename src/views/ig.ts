@@ -28,10 +28,14 @@ function gridView(posts: Post[]): string {
 }
 
 function postCard(p: Post): string {
+  const me = p.username === USERNAME;
+  const avatar = me
+    ? `<div class="avatar"><img src="/avatar.jpg" alt="${USERNAME}" /></div>`
+    : `<div class="avatar"><img src="/guest-avatar.svg" alt="${esc(p.username)}" /></div>`;
   const comments = p.comments
     .map(
       (c) =>
-        `<div class="c"><span class="cu">${esc(c.username ?? USERNAME)}</span> ${linkify(c.text)}</div>`
+        `<div class="c"><span class="cu">${esc(c.username ?? p.username)}</span> ${linkify(c.text)}</div>`
     )
     .join("");
   // carousel: stack images side-scrollable; cover first
@@ -48,9 +52,9 @@ function postCard(p: Post): string {
   return `
     <article class="post" id="post-${p.id}">
       <div class="post-head">
-        <div class="avatar"><img src="/avatar.jpg" alt="${USERNAME}" /></div>
+        ${avatar}
         <div class="post-head-meta">
-          <span class="u">${USERNAME}</span>
+          <span class="u">${esc(p.username)}</span>
           ${p.location ? `<span class="loc">${esc(p.location)}</span>` : ""}
         </div>
         <button class="dots" aria-label="More">${icons.more}</button>
@@ -63,7 +67,7 @@ function postCard(p: Post): string {
         <button class="ic bookmark" aria-label="Save">${icons.bookmark}</button>
       </div>
       ${p.likes != null ? `<div class="likes">${p.likes.toLocaleString()} likes</div>` : ""}
-      <div class="caption"><span class="u">${USERNAME}</span> ${linkify(p.caption)}</div>
+      <div class="caption"><span class="u">${esc(p.username)}</span> ${linkify(p.caption)}</div>
       ${
         p.comments_count && p.comments_count > p.comments.length
           ? `<div class="view-comments">View all ${p.comments_count.toLocaleString()} comments</div>`

@@ -34,6 +34,7 @@ type Exif = { camera?: string; lat?: number; lng?: number; taken?: string };
 type Post = {
   id: string;
   shortcode: string | null;
+  username: string;
   date: string;
   timestamp: number;
   images: Img[];
@@ -94,17 +95,23 @@ const exifFrom = (entry: any): Exif | null => {
 };
 
 // ---- 3. SCRAPE (threads/shortcodes/locations), deduped by shortcode ------
-// The 2017 scrape grabbed the entire #thepercytree hashtag, which includes a
-// handful of posts by *other* accounts. Keep only Bob's own (owner 435625) so
-// imposters are neither added as archive-only nor matched onto his posts.
+// The 2017 scrape grabbed the entire #thepercytree hashtag — including a few
+// posts by *other* accounts. Those belong on the hashtag page (it's real history),
+// but must be attributed to their author, not Bob. The scrape only gives numeric
+// owner ids, so map the known ones to handles by hand.
 const MOBOB_OWNER_ID = "435625";
+const OWNER_USERNAMES: Record<string, string> = {
+  [MOBOB_OWNER_ID]: "mobob",
+  // Other #thepercytree posters — real handles unknown from the data; fill in if known.
+  "3417835": "instagram_user",
+  "2027465871": "instagram_user",
+  "297785830": "instagram_user",
+};
+const ownerName = (id: any) => OWNER_USERNAMES[String(id)] ?? "instagram_user";
+
 const scrapeRaw: any[] = JSON.parse(readFileSync(p("source/thepercytree.json"), "utf8"));
 const scrapeSeen = new Set<string>();
-const scrape = scrapeRaw.filter(
-  (s) =>
-    String(s.owner?.id) === MOBOB_OWNER_ID &&
-    (scrapeSeen.has(s.shortcode) ? false : scrapeSeen.add(s.shortcode))
-);
+const scrape = scrapeRaw.filter((s) => (scrapeSeen.has(s.shortcode) ? false : scrapeSeen.add(s.shortcode)));
 type ScrapePost = { post: any; ts: number; used: boolean };
 const scrapePool: ScrapePost[] = scrape.map((s) => ({ post: s, ts: s.taken_at_timestamp, used: false }));
 const TOL = 3 * 86400; // 3 days
@@ -113,6 +120,7 @@ const matchScrape = (ts: number): any | null => {
   let bestD = Infinity;
   for (const sp of scrapePool) {
     if (sp.used) continue;
+    if (String(sp.post.owner?.id) !== MOBOB_OWNER_ID) continue; // never attach others' posts to Bob's
     const d = Math.abs(sp.ts - ts);
     if (d < bestD) { bestD = d; best = sp; }
   }
@@ -154,6 +162,7 @@ for (const ep of rawExport) {
   posts.push({
     id: scr?.shortcode ?? `t${ts}`,
     shortcode: scr?.shortcode ?? null,
+    username: "mobob",
     date: isoDate(ts),
     timestamp: ts,
     images,
@@ -185,6 +194,7 @@ for (const sp of scrapePool) {
   posts.push({
     id: s.shortcode,
     shortcode: s.shortcode,
+    username: ownerName(s.owner?.id),
     date: isoDate(ts),
     timestamp: ts,
     images: [{ file, width: s.dimensions?.width ?? null, height: s.dimensions?.height ?? null }],
