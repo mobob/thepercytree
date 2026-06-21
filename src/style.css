@@ -428,6 +428,8 @@ a.tag { cursor: pointer; }
 .statement-body p { margin: 0 0 14px; }
 .statement-body p:last-child { margin-bottom: 0; }
 .statement-body em { font-style: italic; }
+.statement-body a { color: var(--ig-blue); text-decoration: none; border-bottom: 1px solid rgba(56, 151, 240, 0.4); }
+.statement-body a:hover { border-bottom-color: var(--ig-blue); }
 
 /* ---- mobile: drop our chrome; the device fills the screen, home button included ---- */
 @media (max-width: 700px) {

@@ -1,6 +1,6 @@
 # #thepercytree
 
-Sometime in 2015 I started looking for an anchor. I was inspired by Noah Kalina, his Everday project and his #bedmounds posts (as well as all his work including recently his call in show). I was also running a lot, and thought it might be neat to do something that married the two.
+Sometime in 2015 I started looking for an anchor. I was inspired by [Noah Kalina](https://noahkalina.com), his [Everday project](https://everyday.photo/) and his [#bedmounds](https://www.yoffypress.com/bedmounds) posts (as well as all his work including recently his [call in show](https://hotline.noahkalina.com/)). I was also running a lot, and thought it might be neat to do something that married the two.
 
 So one day, after i finished my run, about 50m from where I was living, I looked up and saw a nice tree. The street was Percy street. I looked at my feet. I looked at the tree. I snapped a pic. And #thepercytree was born.
 
