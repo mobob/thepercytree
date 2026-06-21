@@ -412,7 +412,8 @@ a.tag { cursor: pointer; }
 
 /* ---- mobile: drop our chrome; the device fills the screen, home button included ---- */
 @media (max-width: 700px) {
-  body { padding: 0; gap: 0; background: #000; }
+  /* lock to the dynamic viewport so there's no 100vh-vs-100dvh scroll strip */
+  body { padding: 0; gap: 0; background: #000; height: 100dvh; min-height: 100dvh; overflow: hidden; }
   .toolbar { display: none; }
   .device { width: 100vw; height: 100dvh; border-radius: 0; }
   #app[data-frame="on"] .device { border: 0; border-radius: 0; height: 100dvh; box-shadow: none; }
