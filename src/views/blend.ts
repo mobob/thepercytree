@@ -36,6 +36,10 @@ export function initBlend(root: HTMLElement) {
   if (!n) return;
   const maxProg = Math.max(1, n - 1);
 
+  // how many neighbours on each side stay "live" (painted/composited). Keeping this
+  // small bounds GPU texture memory so far layers never get dropped from painting.
+  const WINDOW = 2;
+
   let ticking = false;
   const paint = () => {
     ticking = false;
@@ -45,6 +49,12 @@ export function initBlend(root: HTMLElement) {
     const frac = progress - base; // 0 → at `base`, 1 → fully on `base+1`
 
     for (let i = 0; i < n; i++) {
+      const layer = layers[i];
+      // window: only paint layers near the current position; hide the rest entirely
+      const live = i >= base - WINDOW && i <= base + 1 + WINDOW;
+      layer.classList.toggle("live", live);
+      if (!live) continue;
+
       let o = 0;
       let scale = 1;
       if (i < base) o = 0; // already passed
@@ -54,8 +64,8 @@ export function initBlend(root: HTMLElement) {
         o = frac; // incoming fades in on top
         scale = 1.04 - 0.04 * frac; // subtle settle
       }
-      layers[i].style.opacity = String(o);
-      layers[i].style.transform = `scale(${scale})`;
+      layer.style.opacity = String(o);
+      layer.style.transform = `scale(${scale})`;
     }
     if (counter) counter.textContent = String(Math.round(progress) + 1);
     const pct = (progress / maxProg) * 100;

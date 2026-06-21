@@ -222,6 +222,12 @@ a.tag { cursor: pointer; }
   padding: 5vh 6vw;             /* matte border around the image */
   box-sizing: border-box;
   opacity: 0;
+  visibility: hidden;           /* only the live window is painted (set by JS) */
+}
+/* only the few layers near the current scroll position get composited —
+   promoting all 183 at once exhausts GPU texture memory and they stop painting */
+.bl.live {
+  visibility: visible;
   will-change: opacity, transform;
 }
 .blend-counter {
