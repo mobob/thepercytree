@@ -6,7 +6,8 @@
     "data": "bun scripts/ingest-export.ts",
     "dev": "vite",
     "build": "bun scripts/ingest-export.ts && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "bun run scripts/deploy.ts"
   },
   "devDependencies": {
     "typescript": "^5.6.0",
