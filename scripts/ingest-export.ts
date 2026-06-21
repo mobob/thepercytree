@@ -94,9 +94,17 @@ const exifFrom = (entry: any): Exif | null => {
 };
 
 // ---- 3. SCRAPE (threads/shortcodes/locations), deduped by shortcode ------
+// The 2017 scrape grabbed the entire #thepercytree hashtag, which includes a
+// handful of posts by *other* accounts. Keep only Bob's own (owner 435625) so
+// imposters are neither added as archive-only nor matched onto his posts.
+const MOBOB_OWNER_ID = "435625";
 const scrapeRaw: any[] = JSON.parse(readFileSync(p("source/thepercytree.json"), "utf8"));
 const scrapeSeen = new Set<string>();
-const scrape = scrapeRaw.filter((s) => (scrapeSeen.has(s.shortcode) ? false : scrapeSeen.add(s.shortcode)));
+const scrape = scrapeRaw.filter(
+  (s) =>
+    String(s.owner?.id) === MOBOB_OWNER_ID &&
+    (scrapeSeen.has(s.shortcode) ? false : scrapeSeen.add(s.shortcode))
+);
 type ScrapePost = { post: any; ts: number; used: boolean };
 const scrapePool: ScrapePost[] = scrape.map((s) => ({ post: s, ts: s.taken_at_timestamp, used: false }));
 const TOL = 3 * 86400; // 3 days
