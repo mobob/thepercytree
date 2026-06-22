@@ -58,6 +58,15 @@ const immutableDirs = (process.env.DEPLOY_IMMUTABLE_DIRS ?? '_astro,assets')
   .filter(Boolean)
   .filter((d) => existsSync(`${DIST}/${d}`));
 
+// Archival image dirs: stable filenames, rarely change. Long cache so repeat
+// visits and back-navigation serve from disk with no revalidation round-trip.
+const imageDirs = (process.env.DEPLOY_IMAGE_DIRS ?? 'img')
+  .split(',')
+  .map((d) => d.trim())
+  .filter(Boolean)
+  .filter((d) => existsSync(`${DIST}/${d}`));
+const imageCache = process.env.DEPLOY_IMAGE_CACHE ?? 'public,max-age=31536000';
+
 // 2a. Hashed, immutable assets: cache forever.
 for (const dir of immutableDirs) {
   log(`Syncing immutable assets (/${dir})…`);
@@ -71,7 +80,14 @@ for (const dir of immutableDirs) {
   ]);
 }
 
-// 2b. Everything else (HTML, feeds, images, favicon): must be revalidated so
+// 2b. Images (and thumbnails): long-lived but not immutable, so a hard reload
+//     can still pull a re-encoded file. /img sync recurses into /img/thumb.
+for (const dir of imageDirs) {
+  log(`Syncing images (/${dir}, long cache)…`);
+  await s3(['sync', `${DIST}/${dir}`, `s3://${BUCKET}/${dir}`, '--delete', '--cache-control', imageCache]);
+}
+
+// 2c. Everything else (HTML, feeds, favicon, wallpaper): must be revalidated so
 //     edits go live after each deploy + invalidation.
 log('Syncing pages and assets (short cache)…');
 await s3([
@@ -79,7 +95,7 @@ await s3([
   `${DIST}`,
   `s3://${BUCKET}`,
   '--delete',
-  ...immutableDirs.flatMap((d) => ['--exclude', `${d}/*`]),
+  ...[...immutableDirs, ...imageDirs].flatMap((d) => ['--exclude', `${d}/*`]),
   '--cache-control',
   'public,max-age=0,must-revalidate',
 ]);
