@@ -3,7 +3,7 @@
  * One "index" over the image set; the shell (device frame, status bar) lives in main.ts.
  */
 import { icons } from "../icons";
-import { type Post, USERNAME, HASHTAG, coverImg, imgUrl, esc, linkify, longDate } from "../types";
+import { type Post, USERNAME, HASHTAG, coverThumb, imgUrl, esc, linkify, longDate } from "../types";
 
 export type IgView = "grid" | "feed";
 
@@ -19,7 +19,7 @@ function gridView(posts: Post[]): string {
     .map(
       (p) => `
       <a class="cell${p.images.length > 1 ? " multi" : ""}" href="#/ig/p/${p.id}" aria-label="${p.date}">
-        <img loading="lazy" src="${coverImg(p)}" alt="${esc(p.caption).slice(0, 80)}" />
+        <img loading="lazy" decoding="async" src="${coverThumb(p)}" alt="${esc(p.caption).slice(0, 80)}" />
       </a>`
     )
     .join("");

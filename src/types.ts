@@ -24,6 +24,9 @@ export const HASHTAG = "thepercytree";
 
 export const imgUrl = (file: string) => `/img/${file}`;
 export const coverImg = (p: Post) => imgUrl(p.images[0].file);
+// small grid thumbnail (see scripts/thumbs.ts); feed/blend use the full image
+export const thumbUrl = (file: string) => `/img/thumb/${file}`;
+export const coverThumb = (p: Post) => thumbUrl(p.images[0].file);
 
 export const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) =>

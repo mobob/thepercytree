@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "data": "bun scripts/ingest-export.ts",
+    "data": "bun scripts/ingest-export.ts && bun scripts/thumbs.ts",
+    "thumbs": "bun scripts/thumbs.ts",
     "dev": "vite",
     "build": "vite build",
-    "build:data": "bun scripts/ingest-export.ts && vite build",
+    "build:data": "bun scripts/ingest-export.ts && bun scripts/thumbs.ts && vite build",
     "preview": "vite preview",
     "deploy": "bun run scripts/deploy.ts"
   },
